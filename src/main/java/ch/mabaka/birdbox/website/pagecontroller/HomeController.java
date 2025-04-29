@@ -1,12 +1,21 @@
 package ch.mabaka.birdbox.website.pagecontroller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 @Controller
 public class HomeController {
+
+    @Value("${birdbox.stream.url}")
+    private String streamUrl;
+
     @GetMapping("/")
-    public String index() {
+    public String index(final Model model) {
+        model.addAttribute("streamUrl", streamUrl);
         return "index";
     }
 }
+
