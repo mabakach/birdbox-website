@@ -1,4 +1,4 @@
-package ch.mabaka.birdbox_website;
+package ch.mabaka.birdbox.website;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
