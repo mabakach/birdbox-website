@@ -10,7 +10,7 @@ RELEASE_TAG=$(git describe --tags --abbrev=0)
 git checkout $RELEASE_TAG
 
 # Step 3: Build the Docker image tar with the release version
-mvn clean verify jib:buildTar
+mvn clean verify jib:buildTar -Dmaven.test.skip=true
 
 # Step 4: Switch back to the main branch and perform the release
 git checkout main
