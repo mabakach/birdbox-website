@@ -42,6 +42,12 @@ public class TemperatureReaderBean {
     private int sensorTimeout;
 
     /**
+	 * Bean to hold the current temperature and humidity readings.
+	 */
+    @Autowired
+    CurrentTemperatureBean currentTemperatureBean;
+    
+    /**
      * Repository for persisting temperature and humidity measurements.
      */
     @Autowired
@@ -72,8 +78,10 @@ public class TemperatureReaderBean {
         try {
             final SensorResponse response = restTemplate.getForObject(sensorUrl, SensorResponse.class);
             if (response != null) {
-                final TemperatureMeassurementEntity entity = SensorResponseToTemperatureMessurementEntityConverter.convert(response);
-                entity.setMeasurementTimestamp(new java.sql.Timestamp(System.currentTimeMillis()));
+            	final long readTimeMillis = System.currentTimeMillis();
+            	response.setReadTimestamp(java.time.Instant.ofEpochMilli(readTimeMillis));
+                currentTemperatureBean.setLatestSensorResponse(response);
+            	final TemperatureMeassurementEntity entity = SensorResponseToTemperatureMessurementEntityConverter.convert(response);
                 repository.save(entity);
                 LOGGER.info("Read temperature: {}°C, humidity: {}%", entity.getTemperature(), entity.getHumidity());
             } else {

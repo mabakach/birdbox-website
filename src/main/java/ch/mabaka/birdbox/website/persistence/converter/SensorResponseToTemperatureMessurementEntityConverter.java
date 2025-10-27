@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class SensorResponseToTemperatureMessurementEntityConverter {
     public static TemperatureMeassurementEntity convert(SensorResponse response) {
         TemperatureMeassurementEntity entity = new TemperatureMeassurementEntity();
-        entity.setMeasurementTimestamp(new Timestamp(System.currentTimeMillis()));
+        entity.setMeasurementTimestamp(response.getReadTimestamp() != null ? Timestamp.from(response.getReadTimestamp()) : null);
         entity.setTemperature(response.getTemperature_celsius());
         entity.setHumidity(response.getHumidity());
         return entity;
