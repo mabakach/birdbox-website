@@ -1,7 +1,7 @@
 package ch.mabaka.birdbox.website.logic.temperature;
 
 import ch.mabaka.birdbox.website.logic.temperature.SensorResponse;
-import ch.mabaka.birdbox.website.logic.temperature.SensorResponseToEntityConverter;
+import ch.mabaka.birdbox.website.persistence.converter.SensorResponseToTemperatureMessurementEntityConverter;
 import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEntity;
 import ch.mabaka.birdbox.website.persistence.repositories.TemperatureMeassurementRepository;
 import org.slf4j.Logger;
@@ -72,7 +72,7 @@ public class TemperatureReaderBean {
         try {
             final SensorResponse response = restTemplate.getForObject(sensorUrl, SensorResponse.class);
             if (response != null) {
-                final TemperatureMeassurementEntity entity = SensorResponseToEntityConverter.convert(response);
+                final TemperatureMeassurementEntity entity = SensorResponseToTemperatureMessurementEntityConverter.convert(response);
                 entity.setMeasurementTimestamp(new java.sql.Timestamp(System.currentTimeMillis()));
                 repository.save(entity);
                 LOGGER.info("Read temperature: {}°C, humidity: {}%", entity.getTemperature(), entity.getHumidity());

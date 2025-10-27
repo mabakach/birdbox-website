@@ -1,9 +1,10 @@
-package ch.mabaka.birdbox.website.logic.temperature;
+package ch.mabaka.birdbox.website.persistence.converter;
 
+import ch.mabaka.birdbox.website.logic.temperature.SensorResponse;
 import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEntity;
 import java.sql.Timestamp;
 
-public class SensorResponseToEntityConverter {
+public class SensorResponseToTemperatureMessurementEntityConverter {
     public static TemperatureMeassurementEntity convert(SensorResponse response) {
         TemperatureMeassurementEntity entity = new TemperatureMeassurementEntity();
         entity.setMeasurementTimestamp(new Timestamp(System.currentTimeMillis()));
