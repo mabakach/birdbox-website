@@ -43,6 +43,9 @@
 				<div class="stream-container">
 					<img th:src="${streamUrl}" alt="Bird Box Live Stream">
 				</div>
+				<div id="current-temperature-container">
+				
+				</div>
 			</div>
 		</div>
 	</div>
@@ -57,6 +60,29 @@
 	</footer>
 
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+		src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/sockjs.min.js"></script>
+	<script src="/js/stomp.min.js"></script>
+	<script>
+		function connectSensorWebSocket() {
+			var socket = new SockJS('/ws');
+			var stompClient = Stomp.over(socket);
+			stompClient.connect({}, function (frame) {
+				stompClient.subscribe('/topic/SensorResponse', function (message) {
+					var data = JSON.parse(message.body);
+					var temperature = data.temperature_celsius !== undefined ? data.temperature_celsius : '-';
+					var humidity = data.humidity !== undefined ? data.humidity : '-';
+					var timestamp = data.readTimestamp ? new Date(data.readTimestamp).toLocaleString() : '-';
+					var html = '<div class="alert alert-info">'
+						+ '<strong>Aktuelle Temperatur:</strong> ' + temperature + ' °C<br>'
+						+ '<strong>Aktuelle Luftfeuchtigkeit:</strong> ' + humidity + ' %<br>'
+						+ '<strong>Letztes Update:</strong> ' + timestamp
+						+ '</div>';
+					document.querySelector('#current-temperature-container').innerHTML = html;
+				});
+			});
+		}
+		document.addEventListener('DOMContentLoaded', connectSensorWebSocket);
+	</script>
 </body>
 </html>

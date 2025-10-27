@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
@@ -59,6 +60,12 @@ public class TemperatureReaderBean {
     private final RestTemplate restTemplate;
 
     /**
+     * SimpMessagingTemplate for publishing SensorResponse updates to WebSocket clients.
+     */
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    /**
      * Constructs the TemperatureReaderBean and configures the RestTemplate with timeouts.
      */
     public TemperatureReaderBean() {
@@ -78,10 +85,12 @@ public class TemperatureReaderBean {
         try {
             final SensorResponse response = restTemplate.getForObject(sensorUrl, SensorResponse.class);
             if (response != null) {
-            	final long readTimeMillis = System.currentTimeMillis();
-            	response.setReadTimestamp(java.time.Instant.ofEpochMilli(readTimeMillis));
+                final long readTimeMillis = System.currentTimeMillis();
+                response.setReadTimestamp(java.time.Instant.ofEpochMilli(readTimeMillis));
                 currentTemperatureBean.setLatestSensorResponse(response);
-            	final TemperatureMeassurementEntity entity = SensorResponseToTemperatureMessurementEntityConverter.convert(response);
+                // Publish SensorResponse via WebSocket
+                messagingTemplate.convertAndSend("/topic/SensorResponse", response);
+                final TemperatureMeassurementEntity entity = SensorResponseToTemperatureMessurementEntityConverter.convert(response);
                 repository.save(entity);
                 LOGGER.info("Read temperature: {}°C, humidity: {}%", entity.getTemperature(), entity.getHumidity());
             } else {
@@ -96,7 +105,6 @@ public class TemperatureReaderBean {
         } catch (Exception e) {
             LOGGER.error("Failed to read temperature from sensor", e);
             LOGGER.debug("Error details: ", e);
-            
         }
     }
 }
