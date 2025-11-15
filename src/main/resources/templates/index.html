@@ -19,11 +19,17 @@
 }
 
 .footer {
-	position: fixed;
-	bottom: 0;
+	position: static;
 	width: 100%;
 	padding: 1rem;
 	background-color: #f8f9fa;
+	margin-top: 40px;
+}
+#sensorDataTable td:first-child {
+    text-align: left;
+}
+#sensorDataTable td:last-child {
+    text-align: right;
 }
 </style>
 </head>
@@ -39,12 +45,28 @@
 	<div class="container">
 		<div class="row mt-4">
 			<div class="col-12 text-center">
-				<h1>Livestream aus dem Vogelhaus</h1>
-				<div class="stream-container">
-					<img th:src="${streamUrl}" alt="Bird Box Live Stream">
-				</div>
-				<div id="current-temperature-container">
 				
+				<div class="d-flex flex-column justify-content-center align-items-center">
+					<div class="stream-container">
+						<h1>Livestream aus dem Vogelhaus</h1>
+						<img th:src="${streamUrl}" alt="Bird Box Live Stream">
+					</div>
+					<div id="current-temperature-container" class="align-self-center mt-4">
+						<table id="sensorDataTable" class="table table-borderless" style="margin-bottom: 0;">
+							<tr>
+								<td><strong>Aktuelle Temperatur</strong></td>
+								<td><span id="tempValue" th:text="${currentTemperature}">${currentTemperature}</span> °C</td>
+							</tr>
+							<tr>
+								<td><strong>Aktuelle Luftfeuchtigkeit</strong></td>
+								<td><span id="humidityValue" th:text="${currentHumidity}">${currentHumidity}</span> %</td>
+							</tr>
+							<tr>
+							    <td><strong>Letztes Update</strong></td>
+							    <td><span id="lastUpdateValue" th:text="${lastUpdateTime}">${lastUpdateTime}</span></td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -54,8 +76,9 @@
 	<!-- Footer -->
 	<footer class="footer text-center">
 		<div class="container">
-			<span class="text-muted">&copy; 2025 Marc Baumgartner. Alle
-				Rechte vorbehalten.</span>
+			<span class="text-muted">&copy; 2025 Marc Baumgartner. Alle Rechte vorbehalten. | 
+				<a href="https://github.com/mabakach/birdbox-website" target="_blank" rel="noopener noreferrer">Projekt auf GitHub</a>
+			</span>
 		</div>
 	</footer>
 
@@ -73,12 +96,9 @@
 					var temperature = data.temperature_celsius !== undefined ? data.temperature_celsius : '-';
 					var humidity = data.humidity !== undefined ? data.humidity : '-';
 					var timestamp = data.readTimestamp ? new Date(data.readTimestamp).toLocaleString() : '-';
-					var html = '<div class="alert alert-info">'
-						+ '<strong>Aktuelle Temperatur:</strong> ' + temperature + ' °C<br>'
-						+ '<strong>Aktuelle Luftfeuchtigkeit:</strong> ' + humidity + ' %<br>'
-						+ '<strong>Letztes Update:</strong> ' + timestamp
-						+ '</div>';
-					document.querySelector('#current-temperature-container').innerHTML = html;
+					document.getElementById('tempValue').textContent = temperature;
+					document.getElementById('humidityValue').textContent = humidity;
+					document.getElementById('lastUpdateValue').textContent = timestamp;
 				});
 			});
 		}
