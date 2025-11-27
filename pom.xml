@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>ch.mabaka</groupId>
 	<artifactId>birdbox-website</artifactId>
-	<version>0.5.3-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>birdbox-website</name>
 	<description>Birdbox website</description>
 
