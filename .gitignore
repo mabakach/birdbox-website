@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### JD GUI Config ###
+jd-gui.cfg
+
+### Mac OS hidden files ###
+.DS_Store
