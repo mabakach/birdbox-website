@@ -1,11 +1,7 @@
 package ch.mabaka.birdbox.website.logic.temperature;
 
-import ch.mabaka.birdbox.website.logic.temperature.CurrentTemperatureBean;
-import ch.mabaka.birdbox.website.logic.temperature.SensorResponse;
-import ch.mabaka.birdbox.website.persistence.converter.SensorResponseToTemperatureMessurementEntityConverter;
-import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEntity;
-import ch.mabaka.birdbox.website.persistence.repositories.TemperatureMeassurementRepository;
 import java.time.Instant;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +13,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+
+import ch.mabaka.birdbox.website.persistence.converter.SensorResponseToTemperatureMessurementEntityConverter;
+import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEntity;
+import ch.mabaka.birdbox.website.persistence.repositories.TemperatureMeassurementRepository;
 
 @Component
 public class TemperatureReaderBean {
