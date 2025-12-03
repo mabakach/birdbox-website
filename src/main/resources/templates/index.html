@@ -94,7 +94,7 @@
 			stompClient.connect({}, function (frame) {
 				stompClient.subscribe('/topic/SensorResponse', function (message) {
 					var data = JSON.parse(message.body);
-					var temperature = data.temperature_celsius !== undefined ? data.temperature : '-';
+					var temperature = data.temperature !== undefined ? data.temperature : '-';
 					var humidity = data.humidity !== undefined ? data.humidity : '-';
 					var timestamp = data.readTimestamp ? new Date(data.readTimestamp).toLocaleString() : '-';
 					document.getElementById('tempValue').textContent = temperature;
