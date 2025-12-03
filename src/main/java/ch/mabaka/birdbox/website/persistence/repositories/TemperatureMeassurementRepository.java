@@ -41,7 +41,7 @@ public interface TemperatureMeassurementRepository extends JpaRepository<Tempera
         return findMeasurementsAfter(ninetyDaysAgo);
     }
 
-    @Query("SELECT t FROM TemperatureMeassurementEntity t ORDER BY t.measurementTimestamp DESC")
-    Optional<TemperatureMeassurementEntity> findLatestMeasurement();
+    Optional<TemperatureMeassurementEntity> findFirstByOrderByMeasurementTimestampDesc();
+
 	
 }

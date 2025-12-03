@@ -59,7 +59,7 @@ public class TemperatureReaderBean {
   public void init() {
 	  	LOGGER.info("TemperatureReaderBean initialized, sensor URL: {}, timeout: {}ms", this.sensorUrl, Integer.valueOf(this.sensorTimeout));
 	  	// Initial read to populate data immediately after startup
-	  	repository.findLatestMeasurement().ifPresent(entity -> {
+	  	repository.findFirstByOrderByMeasurementTimestampDesc().ifPresent(entity -> {
 	  		currentTemperatureBean.setLatestSensorResponse(
 	  				SensorResponseToTemperatureMessurementEntityConverter.convert(entity)
 	  		);

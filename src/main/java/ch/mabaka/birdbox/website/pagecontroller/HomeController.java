@@ -1,10 +1,9 @@
 package ch.mabaka.birdbox.website.pagecontroller;
 
-import ch.mabaka.birdbox.website.logic.temperature.CurrentTemperatureBean;
-import ch.mabaka.birdbox.website.logic.temperature.SensorResponse;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import ch.mabaka.birdbox.website.logic.temperature.CurrentTemperatureBean;
+import ch.mabaka.birdbox.website.logic.temperature.SensorResponse;
 
 @Controller
 @EnableCaching
