@@ -53,7 +53,7 @@ public class HomeController {
       model.addAttribute("currentHumidity", "N/A");
       model.addAttribute("lastUpdateTime", "N/A");
     } else {
-      model.addAttribute("currentTemperature", String.format("%.1f", new Object[] { Double.valueOf(sensorResponse.getTemperature_celsius()) }));
+      model.addAttribute("currentTemperature", String.format("%.1f", new Object[] { Double.valueOf(sensorResponse.getTemperature()) }));
       model.addAttribute("currentHumidity", String.format("%.1f", new Object[] { Double.valueOf(sensorResponse.getHumidity()) }));
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
       String formattedTime = sensorResponse.getReadTimestamp().atZone(ZoneId.systemDefault()).format(formatter);

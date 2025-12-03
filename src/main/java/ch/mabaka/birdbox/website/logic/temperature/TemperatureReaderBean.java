@@ -51,13 +51,10 @@ public class TemperatureReaderBean {
     try {
       SensorResponse response = (SensorResponse)this.restTemplate.getForObject(this.sensorUrl, SensorResponse.class, new Object[0]);
       if (response != null) {
-        long readTimeMillis = System.currentTimeMillis();
-        response.setReadTimestamp(Instant.ofEpochMilli(readTimeMillis));
-        this.currentTemperatureBean.setLatestSensorResponse(response);
         this.messagingTemplate.convertAndSend("/topic/SensorResponse", response);
         TemperatureMeassurementEntity entity = SensorResponseToTemperatureMessurementEntityConverter.convert(response);
         this.repository.save(entity);
-        LOGGER.info("Read temperature: {}humidity: {}%", entity.getTemperature(), entity.getHumidity());
+        LOGGER.info("Read temperature: {} humidity: {}%", entity.getTemperature(), entity.getHumidity());
       } else {
         LOGGER.warn("Sensor response is null");
       } 
