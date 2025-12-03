@@ -9,6 +9,7 @@ import java.util.jar.Manifest;
 
 public class VersionInfo {
     private static String cachedVersion = null;
+    private static final String EXPECTED_TITLE = "birdbox-website"; // match your artifactId
 
     public static String getImplementationVersion() {
         if (cachedVersion != null) {
@@ -21,8 +22,9 @@ public class VersionInfo {
                 try (InputStream is = url.openStream()) {
                     Manifest manifest = new Manifest(is);
                     Attributes attr = manifest.getMainAttributes();
+                    String title = attr.getValue("Implementation-Title");
                     String version = attr.getValue("Implementation-Version");
-                    if (version != null && !version.isEmpty()) {
+                    if (EXPECTED_TITLE.equals(title) && version != null && !version.isEmpty()) {
                         cachedVersion = version;
                         return version;
                     }
