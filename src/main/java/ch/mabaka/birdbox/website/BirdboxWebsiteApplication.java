@@ -4,6 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * Main application class for the Birdbox Website.
+ */
 @EnableScheduling
 @SpringBootApplication
 public class BirdboxWebsiteApplication {

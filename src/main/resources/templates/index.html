@@ -79,6 +79,7 @@
 			<span class="text-muted">&copy; 2025 Marc Baumgartner. Alle Rechte vorbehalten. | 
 				<a href="https://github.com/mabakach/birdbox-website" target="_blank" rel="noopener noreferrer">Projekt auf GitHub</a>
 			</span>
+			<span id="appVersion" th:text="${appVersion}"> | Version: ${appVersion}</span>
 		</div>
 	</footer>
 
@@ -93,7 +94,7 @@
 			stompClient.connect({}, function (frame) {
 				stompClient.subscribe('/topic/SensorResponse', function (message) {
 					var data = JSON.parse(message.body);
-					var temperature = data.temperature_celsius !== undefined ? data.temperature_celsius : '-';
+					var temperature = data.temperature_celsius !== undefined ? data.temperature : '-';
 					var humidity = data.humidity !== undefined ? data.humidity : '-';
 					var timestamp = data.readTimestamp ? new Date(data.readTimestamp).toLocaleString() : '-';
 					document.getElementById('tempValue').textContent = temperature;

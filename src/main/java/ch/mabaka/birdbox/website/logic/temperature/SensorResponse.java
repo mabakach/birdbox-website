@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
+/**
+ * Represents the response from a temperature and humidity sensor.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SensorResponse {
   @JsonProperty("temperature")

@@ -1,13 +1,18 @@
 package ch.mabaka.birdbox.website.persistence.repositories;
 
-import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEntity;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
-import java.util.List;
+import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEntity;
 
+/**
+ * Repository interface for managing TemperatureMeassurementEntity entities.
+ */
 @Repository
 public interface TemperatureMeassurementRepository extends JpaRepository<TemperatureMeassurementEntity, Long> {
 
@@ -35,4 +40,8 @@ public interface TemperatureMeassurementRepository extends JpaRepository<Tempera
         Timestamp ninetyDaysAgo = new Timestamp(System.currentTimeMillis() - 90L * ONE_DAY_MS);
         return findMeasurementsAfter(ninetyDaysAgo);
     }
+
+    @Query("SELECT t FROM TemperatureMeassurementEntity t ORDER BY t.measurementTimestamp DESC")
+    Optional<TemperatureMeassurementEntity> findLatestMeasurement();
+	
 }

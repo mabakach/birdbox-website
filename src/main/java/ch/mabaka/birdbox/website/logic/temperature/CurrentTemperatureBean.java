@@ -1,7 +1,9 @@
 package ch.mabaka.birdbox.website.logic.temperature;
-import ch.mabaka.birdbox.website.logic.temperature.SensorResponse;
 import org.springframework.stereotype.Component;
 
+/**
+ * A Spring component that holds the latest sensor response for temperature and humidity.
+ */
 @Component
 public class CurrentTemperatureBean {
   private SensorResponse latestSensorResponse;

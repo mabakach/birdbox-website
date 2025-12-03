@@ -9,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Entity class representing a temperature and humidity measurement.
+ */
 @Entity
 @Table(name = "temperature_meassurement")
 public class TemperatureMeassurementEntity {
