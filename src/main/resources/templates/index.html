@@ -55,7 +55,7 @@
 						<table id="sensorDataTable" class="table table-borderless" style="margin-bottom: 0;">
 							<tr>
 								<td><strong>Aktuelle Temperatur</strong></td>
-								<td><span id="tempValue" th:text="${currentTemperature}">${currentTemperature}</span> </td>
+								<td><span id="tempValue" th:text="${currentTemperature}">${currentTemperature}</span> <span> °C</span></td>
 							</tr>
 							<tr>
 								<td><strong>Aktuelle Luftfeuchtigkeit</strong></td>
@@ -88,22 +88,32 @@
 	<script src="/js/sockjs.min.js"></script>
 	<script src="/js/stomp.min.js"></script>
 	<script>
-		function connectSensorWebSocket() {
-			var socket = new SockJS('/ws');
-			var stompClient = Stomp.over(socket);
-			stompClient.connect({}, function (frame) {
-				stompClient.subscribe('/topic/SensorResponse', function (message) {
-					var data = JSON.parse(message.body);
-					var temperature = data.temperature !== undefined ? data.temperature : '-';
-					var humidity = data.humidity !== undefined ? data.humidity : '-';
-					var timestamp = data.readTimestamp ? new Date(data.readTimestamp).toLocaleString() : '-';
-					document.getElementById('tempValue').textContent = temperature;
-					document.getElementById('humidityValue').textContent = humidity;
-					document.getElementById('lastUpdateValue').textContent = timestamp;
-				});
-			});
-		}
-		document.addEventListener('DOMContentLoaded', connectSensorWebSocket);
-	</script>
+    function formatDateWithLeadingZeros(date) {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const hours = String(d.getHours()).padStart(2, '0');
+        const minutes = String(d.getMinutes()).padStart(2, '0');
+        const seconds = String(d.getSeconds()).padStart(2, '0');
+        return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+    }
+    function connectSensorWebSocket() {
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/topic/SensorResponse', function (message) {
+                var data = JSON.parse(message.body);
+                var temperature = data.temperature !== undefined ? data.temperature : '-';
+                var humidity = data.humidity !== undefined ? data.humidity : '-';
+                var timestamp = data.readTimestamp ? formatDateWithLeadingZeros(data.readTimestamp) : '-';
+                document.getElementById('tempValue').textContent = temperature;
+                document.getElementById('humidityValue').textContent = humidity;
+                document.getElementById('lastUpdateValue').textContent = timestamp;
+            });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', connectSensorWebSocket);
+</script>
 </body>
 </html>
