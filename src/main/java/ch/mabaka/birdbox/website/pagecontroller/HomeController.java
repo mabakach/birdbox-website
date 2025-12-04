@@ -73,7 +73,7 @@ public class HomeController {
       String formattedTime = sensorResponse.getReadTimestamp().atZone(ZoneId.systemDefault()).format(formatter);
       model.addAttribute("lastUpdateTime", formattedTime);
     }
-    model.addAttribute("appVersion", ch.mabaka.birdbox.website.util.VersionInfo.getImplementationVersion());
+    model.addAttribute("appVersion", ch.mabaka.birdbox.website.Version.BUILD_NUMBER);
     return "index";
   }
 }
