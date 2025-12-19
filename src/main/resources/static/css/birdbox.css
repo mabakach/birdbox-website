@@ -1,0 +1,26 @@
+/* Birdbox Live Stream Custom Styles */
+
+.stream-container {
+	max-width: 100%;
+	margin: 20px auto;
+}
+
+.stream-container img {
+	max-width: 100%;
+	height: auto;
+}
+
+.footer {
+	position: static;
+	width: 100%;
+	padding: 1rem;
+	background-color: #f8f9fa;
+	margin-top: 40px;
+}
+
+#sensorDataTable td:first-child {
+    text-align: left;
+}
+#sensorDataTable td:last-child {
+    text-align: right;
+}
