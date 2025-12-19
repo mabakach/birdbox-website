@@ -26,15 +26,15 @@
 }
 
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.active:focus, .navbar-nav .nav-link.active:visited {
-    background-color: #0d6efd !important; /* Bootstrap primary */
-    color: #fff !important;
-    border-radius: 0.25rem;
+    background: none !important;
+    color: #0d6efd !important; /* Bootstrap primary blue */
+    border-radius: 0;
     font-weight: 600;
-    box-shadow: 0 2px 8px rgba(13,110,253,0.08);
-    text-decoration: none !important;
+    box-shadow: none;
+    text-decoration: underline !important;
 }
 
 .navbar-nav .nav-link.active:hover {
-    background-color: #0b5ed7 !important;
-    color: #fff !important;
+    color: #0b5ed7 !important;
+    text-decoration: underline !important;
 }
