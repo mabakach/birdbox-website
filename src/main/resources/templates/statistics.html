@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="de">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Birdbox Statistiken</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/birdbox.css" rel="stylesheet">
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/chart.js"></script>
+<script src="/js/birdbox.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="fragments.html :: navbar"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <h1>Statistiken</h1>
+                <div class="mb-3">
+                    <label for="periodSelect" class="form-label">Zeitraum wählen:</label>
+                    <select id="periodSelect" class="form-select w-auto d-inline-block">
+                        <option value="day">Letzte 24 Stunden</option>
+                        <option value="week">Letzte Woche</option>
+                        <option value="month">Letzter Monat</option>
+                        <option value="quarter">Letztes Quartal</option>
+                    </select>
+                </div>
+                <div class="chart-container d-flex justify-content-center" style="position: relative; height:50vh; width:100%">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="fragments.html :: footer"></div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const measurementsData = {
+            day: /*[[${measurementsDay}]]*/ [],
+            week: /*[[${measurementsWeek}]]*/ [],
+            month: /*[[${measurementsMonth}]]*/ [],
+            quarter: /*[[${measurementsQuarter}]]*/ []
+        };
+        function getChartData(period) {
+            const measurements = measurementsData[period] || [];
+            if (period === 'day') {
+                return {
+                    labels: measurements.map(m => new Date(m.measurementTimestamp).toLocaleString([], {month:'2-digit', day:'2-digit', hour: '2-digit', minute:'2-digit'})),
+                    temperatureData: measurements.map(m => m.temperature),
+                    humidityData: measurements.map(m => m.humidity)
+                };
+            } else {
+                return {
+                    labels: measurements.map(m => new Date(m.timestamp).toLocaleString([], {month:'2-digit', day:'2-digit', hour: '2-digit', minute:'2-digit'})),
+                    temperatureData: measurements.map(m => m.avgTemperature),
+                    humidityData: measurements.map(m => m.avgHumidity)
+                };
+            }
+        }
+        let currentPeriod = 'day';
+        let chartInstance = null;
+        function renderChart(period) {
+            const {labels, temperatureData, humidityData} = getChartData(period);
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Temperatur (°C)',
+                            data: temperatureData,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            yAxisID: 'y',
+                            tension: 0.2
+                        },
+                        {
+                            label: 'Luftfeuchtigkeit (%)',
+                            data: humidityData,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            yAxisID: 'y1',
+                            tension: 0.2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    stacked: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Temperatur (°C)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            title: {
+                                display: true,
+                                text: 'Luftfeuchtigkeit (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChart(currentPeriod);
+            document.getElementById('periodSelect').addEventListener('change', function(e) {
+                currentPeriod = e.target.value;
+                renderChart(currentPeriod);
+            });
+            birdboxInit();
+        });
+        /*]]>*/
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', birdboxInit);
+    </script>
+</body>
+</html>

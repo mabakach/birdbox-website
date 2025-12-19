@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="de">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:replace="~{::title}">Birdbox</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/birdbox.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!-- Header/Navbar Fragment -->
+    <div th:fragment="navbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="/">Birdbox</a>
+                <a class="nav-link" href="/statistics.html">Statistiken</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Footer Fragment -->
+    <div th:fragment="footer">
+        <footer class="footer text-center">
+            <div class="container">
+                <span class="text-muted">&copy; 2025 Marc Baumgartner. Alle Rechte vorbehalten. |
+                    <a href="https://github.com/mabakach/birdbox-website" target="_blank" rel="noopener noreferrer">Projekt auf GitHub</a> | Version:
+                </span>
+                <span class="text-muted" id="appVersion" th:text="${appVersion}">${appVersion}</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

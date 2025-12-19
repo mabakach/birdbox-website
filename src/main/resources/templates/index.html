@@ -4,66 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Birdbox Live Stream</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
 <link href="/css/birdbox.css" rel="stylesheet">
+<script src="/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-	<!-- Header -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<div class="container">
-			<a class="navbar-brand" href="#">Birdbox</a>
-		</div>
-	</nav>
-
-	<!-- Main Content -->
-	<div class="container">
-		<div class="row mt-4">
-			<div class="col-12 text-center">
-				
-				<div class="d-flex flex-column justify-content-center align-items-center">
-					<div class="stream-container">
-						<h1>Livestream aus dem Vogelhaus</h1>
-						<img id="livestreamImg" th:src="${streamUrl}" alt="Bird Box Live Stream" onerror="handleStreamError()">
-					</div>
-					<div id="current-temperature-container" class="align-self-center mt-4">
-						<table id="sensorDataTable" class="table table-borderless" style="margin-bottom: 0;">
-							<tr>
-								<td><strong>Aktuelle Temperatur</strong></td>
-								<td><span id="tempValue" th:text="${currentTemperature}">${currentTemperature}</span> <span> °C</span></td>
-							</tr>
-							<tr>
-								<td><strong>Aktuelle Luftfeuchtigkeit</strong></td>
-								<td><span id="humidityValue" th:text="${currentHumidity}">${currentHumidity}</span> %</td>
-							</tr>
-							<tr>
-							    <td><strong>Letztes Update</strong></td>
-							    <td><span id="lastUpdateValue" th:text="${lastUpdateTime}">${lastUpdateTime}</span></td>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<!-- Footer -->
-	<footer class="footer text-center">
-		<div class="container">
-			<span class="text-muted">&copy; 2025 Marc Baumgartner. Alle Rechte vorbehalten. | 
-				<a href="https://github.com/mabakach/birdbox-website" target="_blank" rel="noopener noreferrer">Projekt auf GitHub</a> | Version:
-			</span>
-			<span class="text-muted" id="appVersion" th:text="${appVersion}">${appVersion}</span>
-		</div>
-	</footer>
-
-	<script
-		src="/js/bootstrap.bundle.min.js"></script>
-	<script src="/js/sockjs.min.js"></script>
-	<script src="/js/stomp.min.js"></script>
-	<script>
+    <!-- Header -->
+    <div th:replace="fragments.html :: navbar"></div>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="stream-container">
+                        <h1>Livestream aus dem Vogelhaus</h1>
+                        <img id="livestreamImg" th:src="${streamUrl}" alt="Bird Box Live Stream" onerror="handleStreamError()">
+                    </div>
+                    <div id="current-temperature-container" class="align-self-center mt-4">
+                        <table id="sensorDataTable" class="table table-borderless" style="margin-bottom: 0;">
+                            <tr>
+                                <td><strong>Aktuelle Temperatur</strong></td>
+                                <td><span id="tempValue" th:text="${currentTemperature}">${currentTemperature}</span> <span> °C</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Aktuelle Luftfeuchtigkeit</strong></td>
+                                <td><span id="humidityValue" th:text="${currentHumidity}">${currentHumidity}</span> %</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Letztes Update</strong></td>
+                                <td><span id="lastUpdateValue" th:text="${lastUpdateTime}">${lastUpdateTime}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <div th:replace="fragments.html :: footer"></div>
+    <script src="/js/sockjs.min.js"></script>
+    <script src="/js/stomp.min.js"></script>
+    <script>
     function formatDateWithLeadingZeros(date) {
         const d = new Date(date);
         const day = String(d.getDate()).padStart(2, '0');
