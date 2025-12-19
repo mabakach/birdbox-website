@@ -74,6 +74,7 @@ public class HomeController {
       model.addAttribute("lastUpdateTime", formattedTime);
     }
     model.addAttribute("appVersion", ch.mabaka.birdbox.website.Version.BUILD_NUMBER);
+    model.addAttribute("activePage", "index");
     return "index";
   }
 }

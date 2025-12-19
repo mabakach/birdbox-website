@@ -13,8 +13,14 @@
     <div th:fragment="navbar">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="/">Birdbox</a>
-                <a class="nav-link" href="/statistics.html">Statistiken</a>
+                <ul class="navbar-nav flex-row">
+                    <li class="nav-item">
+                        <a class="nav-link px-2" href="/" th:classappend="${activePage} == 'index' ? ' active' : ''">Birdbox</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2" href="/statistics.html" th:classappend="${activePage} == 'statistics' ? ' active' : ''">Statistiken</a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </div>

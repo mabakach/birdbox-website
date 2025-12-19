@@ -26,6 +26,7 @@ public class StatisticsController {
         model.addAttribute("measurementsWeek", temperatureMeassurementRepository.findLastWeekMeasurements()); // Use raw data for week
         model.addAttribute("measurementsMonth", temperatureMeassurementRepository.findLastMonthAggregated());
         model.addAttribute("measurementsQuarter", temperatureMeassurementRepository.findLastQuarterAggregated());
+        model.addAttribute("activePage", "statistics");
         return "statistics";
     }
 }

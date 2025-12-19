@@ -8,7 +8,7 @@
 <link href="/css/birdbox.css" rel="stylesheet">
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/chart.js"></script>
-<script src="/js/birdbox.js"></script>
+<!-- <script src="/js/birdbox.js"></script>  -->
 </head>
 <body>
     <!-- Header -->
@@ -48,15 +48,27 @@
         };
         function getChartData(period) {
             const measurements = measurementsData[period] || [];
-            if (period === 'day' || period === 'week') {
+            if (period === 'day') {
                 return {
-                    labels: measurements.map(m => new Date(m.measurementTimestamp).toLocaleString([], {month:'2-digit', day:'2-digit', hour: '2-digit', minute:'2-digit'})),
+                    labels: measurements.map(m => {
+                        const d = new Date(m.measurementTimestamp);
+                        // Format: DD.MM.YYYY HH:mm (no comma)
+                        const date = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                        const time = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                        return `${date} ${time}`;
+                    }),
+                    temperatureData: measurements.map(m => m.temperature),
+                    humidityData: measurements.map(m => m.humidity)
+                };
+            } else if (period === 'week') {
+                return {
+                    labels: measurements.map(m => new Date(m.measurementTimestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })),
                     temperatureData: measurements.map(m => m.temperature),
                     humidityData: measurements.map(m => m.humidity)
                 };
             } else {
                 return {
-                    labels: measurements.map(m => new Date(m.timestamp).toLocaleString([], {month:'2-digit', day:'2-digit', hour: '2-digit', minute:'2-digit'})),
+                    labels: measurements.map(m => new Date(m.timestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })),
                     temperatureData: measurements.map(m => m.avgTemperature),
                     humidityData: measurements.map(m => m.avgHumidity)
                 };
