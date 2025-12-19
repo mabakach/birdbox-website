@@ -23,7 +23,7 @@ public class StatisticsController {
     @GetMapping("/statistics.html")
     public String statistics(Model model) {
         model.addAttribute("measurementsDay", temperatureMeassurementRepository.findLastDayMeasurements());
-        model.addAttribute("measurementsWeek", temperatureMeassurementRepository.findLastWeekAggregated());
+        model.addAttribute("measurementsWeek", temperatureMeassurementRepository.findLastWeekMeasurements()); // Use raw data for week
         model.addAttribute("measurementsMonth", temperatureMeassurementRepository.findLastMonthAggregated());
         model.addAttribute("measurementsQuarter", temperatureMeassurementRepository.findLastQuarterAggregated());
         return "statistics";

@@ -23,9 +23,9 @@
                     <label for="periodSelect" class="form-label">Zeitraum wählen:</label>
                     <select id="periodSelect" class="form-select w-auto d-inline-block">
                         <option value="day">Letzte 24 Stunden</option>
-                        <option value="week">Letzte Woche</option>
-                        <option value="month">Letzter Monat</option>
-                        <option value="quarter">Letztes Quartal</option>
+                        <option value="week">Letzte 7 Tage</option>
+                        <option value="month">Letzte 30 Tage</option>
+                        <option value="quarter">Letzte 90 Tage</option>
                     </select>
                 </div>
                 <div class="chart-container d-flex justify-content-center" style="position: relative; height:50vh; width:100%">
@@ -48,7 +48,7 @@
         };
         function getChartData(period) {
             const measurements = measurementsData[period] || [];
-            if (period === 'day') {
+            if (period === 'day' || period === 'week') {
                 return {
                     labels: measurements.map(m => new Date(m.measurementTimestamp).toLocaleString([], {month:'2-digit', day:'2-digit', hour: '2-digit', minute:'2-digit'})),
                     temperatureData: measurements.map(m => m.temperature),
