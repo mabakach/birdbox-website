@@ -8,6 +8,7 @@
 <link href="/css/birdbox.css" rel="stylesheet">
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/chart.js"></script>
+<script src="/js/chartjs-adapter-date-fns.js"></script>
 <!-- <script src="/js/birdbox.js"></script>  -->
 </head>
 <body>
@@ -46,48 +47,52 @@
             month: /*[[${measurementsMonth}]]*/ [],
             quarter: /*[[${measurementsQuarter}]]*/ []
         };
+        function toISODateString(sqlTimestamp) {
+            // Converts 'YYYY-MM-DD HH:mm:ss.SSSSSS' to 'YYYY-MM-DDTHH:mm:ss.SSSSSS'
+            if (typeof sqlTimestamp === 'string') {
+                return sqlTimestamp.replace(' ', 'T');
+            }
+            return sqlTimestamp;
+        }
         function getChartData(period) {
             const measurements = measurementsData[period] || [];
             function sanitizeNumber(val) {
                 const num = Number(val);
                 return isNaN(num) ? null : num;
             }
-            if (period === 'day') {
+            if (period === 'day' || period === 'week') {
                 return {
-                    labels: measurements.map(m => {
-                        const d = new Date(m.measurementTimestamp);
-                        // Format: DD.MM.YYYY HH:mm (no comma)
-                        const date = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                        const time = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                        return `${date} ${time}`;
-                    }),
-                    temperatureData: measurements.map(m => sanitizeNumber(m.temperature)),
-                    humidityData: measurements.map(m => sanitizeNumber(m.humidity))
-                };
-            } else if (period === 'week') {
-                return {
-                    labels: measurements.map(m => new Date(m.measurementTimestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })),
-                    temperatureData: measurements.map(m => sanitizeNumber(m.temperature)),
-                    humidityData: measurements.map(m => sanitizeNumber(m.humidity))
+                    temperatureData: measurements.map(m => ({
+                        x: toISODateString(m.measurementTimestamp),
+                        y: sanitizeNumber(m.temperature)
+                    })),
+                    humidityData: measurements.map(m => ({
+                        x: toISODateString(m.measurementTimestamp),
+                        y: sanitizeNumber(m.humidity)
+                    }))
                 };
             } else {
                 return {
-                    labels: measurements.map(m => new Date(m.timestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })),
-                    temperatureData: measurements.map(m => sanitizeNumber(m.avgTemperature)),
-                    humidityData: measurements.map(m => sanitizeNumber(m.avgHumidity))
+                    temperatureData: measurements.map(m => ({
+                        x: toISODateString(m.timestamp),
+                        y: sanitizeNumber(m.avgTemperature)
+                    })),
+                    humidityData: measurements.map(m => ({
+                        x: toISODateString(m.timestamp),
+                        y: sanitizeNumber(m.avgHumidity)
+                    }))
                 };
             }
         }
         let currentPeriod = 'day';
         let chartInstance = null;
         function renderChart(period) {
-            const {labels, temperatureData, humidityData} = getChartData(period);
+            const {temperatureData, humidityData} = getChartData(period);
             const ctx = document.getElementById('statsChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
             chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
                     datasets: [
                         {
                             label: 'Temperatur (°C)',
@@ -123,6 +128,21 @@
                         }
                     },
                     scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                tooltipFormat: 'dd.MM.yyyy HH:mm',
+                                displayFormats: {
+                                    hour: 'dd.MM.yyyy HH:mm',
+                                    minute: 'dd.MM.yyyy HH:mm',
+                                    day: 'dd.MM.yyyy'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Zeit'
+                            }
+                        },
                         y: {
                             type: 'linear',
                             display: true,
@@ -156,12 +176,8 @@
                 currentPeriod = e.target.value;
                 renderChart(currentPeriod);
             });
-            birdboxInit();
         });
         /*]]>*/
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', birdboxInit);
     </script>
 </body>
 </html>
