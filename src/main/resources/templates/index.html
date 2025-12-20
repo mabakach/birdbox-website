@@ -18,7 +18,7 @@
                 <div class="d-flex flex-column justify-content-center align-items-center">
                     <div class="stream-container">
                         <h1>Livestream aus dem Vogelhaus</h1>
-                        <img id="livestreamImg" th:src="${streamUrl}" alt="Bird Box Live Stream" onerror="handleStreamError()">
+                        <img id="livestreamImg" alt="Bird Box Live Stream" onerror="handleStreamError()">
                     </div>
                     <div id="current-temperature-container" class="align-self-center mt-4">
                         <table id="sensorDataTable" class="table table-borderless" style="margin-bottom: 0;">
@@ -44,7 +44,9 @@
     <div th:replace="fragments.html :: footer"></div>
     <script src="/js/sockjs.min.js"></script>
     <script src="/js/stomp.min.js"></script>
-    <script>
+    <script th:inline="javascript">
+    //<![CDATA[
+    var streamUrl = /*[[${streamUrl}]]*/ '';
     function formatDateWithLeadingZeros(date) {
         const d = new Date(date);
         const day = String(d.getDate()).padStart(2, '0');
@@ -55,12 +57,10 @@
         const seconds = String(d.getSeconds()).padStart(2, '0');
         return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
     }
-    
     var stompClient = null;
     var socket = null;
     var reconnectTimeout = null;
     var reconnectDelay = 3000; // ms
-    
     function connectSensorWebSocket() {
         if (stompClient && stompClient.connected) {
             return;
@@ -78,7 +78,6 @@
                 document.getElementById('lastUpdateValue').textContent = timestamp;
             });
         }, function (error) {
-            // On error, try to reconnect after a delay
             scheduleReconnect();
         });
         if (socket) {
@@ -94,38 +93,34 @@
             connectSensorWebSocket();
         }, reconnectDelay);
     }
+    function setLivestreamImgSrc() {
+        var img = document.getElementById('livestreamImg');
+        if (img && streamUrl) {
+            img.src = streamUrl + '?_ts=' + new Date().getTime();
+        }
+    }
     // Handle page visibility changes
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
-            // Page became visible again
-            reloadLivestreamImg();
+            setLivestreamImgSrc();
             connectSensorWebSocket();
         }
     });
-    // Livestream image reload logic
     function reloadLivestreamImg() {
-        var img = document.getElementById('livestreamImg');
-        if (img) {
-            // Add a cache buster to force reload
-            var src = img.getAttribute('th:src') || img.src;
-            var url = src.split('?')[0] + '?_ts=' + new Date().getTime();
-            img.src = url;
-        }
+        setLivestreamImgSrc();
     }
     function handleStreamError() {
-        // Try to reload the image after a short delay
         setTimeout(reloadLivestreamImg, 2000);
     }
     document.addEventListener('DOMContentLoaded', function() {
+        setLivestreamImgSrc();
         connectSensorWebSocket();
     });
-    // Handle Safari bfcache restore (and other browsers)
     window.addEventListener('pageshow', function(event) {
-        if (event.persisted) {
-            reloadLivestreamImg();
-            connectSensorWebSocket();
-        }
+        setLivestreamImgSrc();
+        connectSensorWebSocket();
     });
-</script>
+    //]]>
+    </script>
 </body>
 </html>
