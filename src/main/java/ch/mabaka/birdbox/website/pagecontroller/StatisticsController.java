@@ -27,6 +27,7 @@ public class StatisticsController {
         model.addAttribute("measurementsMonth", temperatureMeassurementRepository.findLastMonthAggregated());
         model.addAttribute("measurementsQuarter", temperatureMeassurementRepository.findLastQuarterAggregated());
         model.addAttribute("activePage", "statistics");
+        model.addAttribute("appVersion", ch.mabaka.birdbox.website.Version.BUILD_NUMBER);
         return "statistics";
     }
 }
