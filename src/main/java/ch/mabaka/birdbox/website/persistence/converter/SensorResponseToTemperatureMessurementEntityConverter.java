@@ -5,10 +5,11 @@ import ch.mabaka.birdbox.website.persistence.entities.TemperatureMeassurementEnt
 import java.sql.Timestamp;
 
 /**
- * Converter class to transform between SensorResponse and TemperatureMeassurementEntity.
+ * Converter class to transform between SensorResponse and
+ * TemperatureMeassurementEntity.
  */
 public class SensorResponseToTemperatureMessurementEntityConverter {
-	
+
 	/**
 	 * Converts a SensorResponse object to a TemperatureMeassurementEntity object.
 	 *
@@ -23,7 +24,7 @@ public class SensorResponseToTemperatureMessurementEntityConverter {
 		entity.setHumidity(Double.valueOf(response.getHumidity()));
 		return entity;
 	}
-	
+
 	/**
 	 * Converts a TemperatureMeassurementEntity object to a SensorResponse object.
 	 *

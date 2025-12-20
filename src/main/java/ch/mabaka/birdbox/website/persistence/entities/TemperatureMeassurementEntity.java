@@ -17,18 +17,17 @@ import jakarta.persistence.Table;
 public class TemperatureMeassurementEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false)
-    private Long id;
+	@Column(nullable = false)
+	private Long id;
 
-    @Column(nullable = false)
-    private Timestamp measurementTimestamp;
+	@Column(nullable = false)
+	private Timestamp measurementTimestamp;
 
-    @Column(nullable = false)
-    private Double temperature;
+	@Column(nullable = false)
+	private Double temperature;
 
-    @Column(nullable = false)
-    private Double humidity;
-
+	@Column(nullable = false)
+	private Double humidity;
 
 	public Long getId() {
 		return id;
@@ -41,7 +40,7 @@ public class TemperatureMeassurementEntity {
 	public Timestamp getMeasurementTimestamp() {
 		return measurementTimestamp;
 	}
-	
+
 	public void setMeasurementTimestamp(final Timestamp measurementTimestamp) {
 		this.measurementTimestamp = measurementTimestamp;
 	}
