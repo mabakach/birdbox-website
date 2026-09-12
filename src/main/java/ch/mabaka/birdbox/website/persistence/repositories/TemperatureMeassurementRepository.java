@@ -80,6 +80,10 @@ public interface TemperatureMeassurementRepository extends JpaRepository<Tempera
 				ts = (java.sql.Timestamp) tsObj;
 			} else if (tsObj instanceof java.sql.Date) {
 				ts = new java.sql.Timestamp(((java.sql.Date) tsObj).getTime());
+			} else if (tsObj instanceof java.time.LocalDate) {
+				ts = java.sql.Timestamp.valueOf(((java.time.LocalDate) tsObj).atStartOfDay());
+			} else if (tsObj instanceof java.time.LocalDateTime) {
+				ts = java.sql.Timestamp.valueOf((java.time.LocalDateTime) tsObj);
 			} else if (tsObj instanceof String) {
 				String s = (String) tsObj;
 				if (s.length() == 10) {
@@ -90,7 +94,7 @@ public interface TemperatureMeassurementRepository extends JpaRepository<Tempera
 			} else {
 				throw new IllegalArgumentException("Unknown timestamp type: " + tsObj.getClass());
 			}
-			dtos.add(new AggregatedMeasurementDTO(ts, (Double) row[1], (Double) row[2]));
+			dtos.add(new AggregatedMeasurementDTO(ts, ((Number) row[1]).doubleValue(), ((Number) row[2]).doubleValue()));
 		}
 		return dtos;
 	}
